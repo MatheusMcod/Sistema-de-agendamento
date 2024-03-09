@@ -1,0 +1,20 @@
+{
+  "name": "sistema-de-agendamento",
+  "version": "1.0.0",
+  "description": "Sistema de agendamento",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matheus Moreira",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.3",
+    "mongoose": "^8.2.1",
+    "nodemailer": "^6.9.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
