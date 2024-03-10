@@ -1,8 +1,8 @@
-let moongose = require("mongoose");
+const moongose = require("mongoose");
 
 class User {
   CreateUserData(name, phoneNumber, email, service, date, hour) {
-    let userDate = new moongose.Schema({
+    const userDate = new moongose.Schema({
       name: String,
       phoneNumber: String,
       email: String,
@@ -10,6 +10,8 @@ class User {
       date: Date,
       hour: String
     });
+
+    return userDate;
   }
 }
 
