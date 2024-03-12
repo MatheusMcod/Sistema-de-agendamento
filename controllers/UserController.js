@@ -1,15 +1,13 @@
 const mongoose = require("mongoose");
-const userScheme = require("../schemes/User.js");
+const userModel = require("../schemes/User.js");
 
 class UserController{
 
     async createSchedule(req, res){
-        const userModel = mongoose.model('userModel', userScheme.CreateUserData);
-
         const {name, phoneNumber, email, service, date, hour} = req.body;
 
         try {
-          await userModel.save({
+          const newUser = new userModel({
             name,
             phoneNumber,
             email,
@@ -17,11 +15,13 @@ class UserController{
             date,
             hour
           });
-          res.redirect("/");
+
+          await newUser.save();
+          res.status(201).redirect("/");
+          console.log("Successfully saved to database");
         } catch (err) {
-          console.error(err);
-          console.log("Error saving to database");
-          res.redirect("/");
+          res.status(500).redirect("/");
+          console.error("Error saving to database: ", err.message);
         }
     }
 

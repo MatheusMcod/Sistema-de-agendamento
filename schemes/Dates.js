@@ -1,14 +1,10 @@
-let moongose = require("mongoose");
+let mongoose = require("mongoose");
 
-class Dates {
-  CreatScheduleDate(date, hour) {
-    let scheduleDate = new moongose.Schema({
-      date: Date,
-      hour: {
-        String
-      }
-    });
-  };
-}
+const scheduleDate = new mongoose.Schema({
+  date: Date,
+  hour: [{type: String}]
+});
 
-module.exports = new User;
+const dateModel = mongoose.model('dateModel', scheduleDate);
+
+module.exports = dateModel;

@@ -1,18 +1,14 @@
-const moongose = require("mongoose");
+const mongoose = require("mongoose");
 
-class User {
-  CreateUserData(name, phoneNumber, email, service, date, hour) {
-    const userDate = new moongose.Schema({
-      name: String,
-      phoneNumber: String,
-      email: String,
-      service: String,
-      date: Date,
-      hour: String
-    });
+const userDate = new mongoose.Schema({
+  name: String,
+  phoneNumber: String,
+  email: String,
+  service: String,
+  date: Date,
+  hour: String
+});
 
-    return userDate;
-  }
-}
+const userModel = mongoose.model('userModel', userDate);
 
-module.exports = new User;
+module.exports = userModel;
