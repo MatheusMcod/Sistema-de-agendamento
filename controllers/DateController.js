@@ -1,26 +1,32 @@
 const mongoose = require("mongoose");
-const dateModel = require("../schemes/Dates.js");
+const dateModel = require("../models/Dates");
 
 class DateController {
 
-    async createAvailableHours (req, res) {
+    async requestCreateAvailableHours (req, res) {
         const {date, hour} = req.body;
+        const modelResponse = await dateModel.createAvailableHours(date, hour);
 
-        try {
-          const newDate = new dateModel({
-            date,
-            hour
-          });
-
-          newDate.save();
-          res.status(201).redirect("/");
+        if(modelResponse) {
           console.log("Successfully saved to database");
-        } catch (err) {
+          res.status(201).redirect("/");
+        } else {
+          console.error("Error saving to database: ", modelResponse.message);
           res.status(500).redirect("/");
-          console.error("Error saving to database: ", err.message);
         }
     }
 
+    async RequestFindAllAvailableHours(req, res) {
+      const hors = await dateModel.findAllAvailableHours();
+
+      if (hors.status) {
+        res.status(200).json(hors.data);
+        console.log("Successfully find to schedules");
+      } else {
+        res.status(500).send("Unexpected error");
+        console.error("Error find to database: ", hors.data.message);
+      }
+  }
 }
 
 module.exports = new DateController();
