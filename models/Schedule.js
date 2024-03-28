@@ -40,6 +40,26 @@ class Schedule {
     }
   }
 
+  async findSchedulesByDate(date) {
+    try {
+      const schedules = await schedulesHors.find({date: date});
+
+      return {data: schedules, status: true};
+    } catch(err) {
+      return {data: err, status: false};
+    }
+  }
+
+  async findOneScheduleByDateAndAttribute(dateAndAttribute) {
+    try {
+      const schedules = await schedulesHors.findOne(dateAndAttribute);
+
+      return {data: schedules, status: true};
+    } catch(err) {
+      return {data: err, status: false};
+    }
+  }
+
 }
 
 module.exports = new Schedule;

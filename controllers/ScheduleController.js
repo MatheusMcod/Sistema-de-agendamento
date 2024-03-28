@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const scheduleModel = require("../models/Schedule.js");
 
-class UserController{
+class UserController {
 
-    async RequestCreateSchedule(req, res){
+    async RequestCreateSchedule(req, res) {
         const {name, phoneNumber, email, service, date, hour} = req.body;
         const modelResponse = await scheduleModel.createSchedule(name, phoneNumber, email, service, date, hour);
 
@@ -24,8 +24,35 @@ class UserController{
           console.log("Successfully find to schedules");
         } else {
           res.status(500).send("Unexpected error");
-          console.error("Error find to database: ", schedules.data.message);
+          console.error("Error find to database: ", schedules.data);
         }
+    }
+
+    async RequestFindSchedulesByDate(req, res) {
+      const date = req.params.date;
+      console.log(date)
+      const schedules = await scheduleModel.findSchedulesByDate(date);
+
+      if (schedules.status) {
+        res.status(200).json(schedules.data);
+        console.log("Successfully find to schedules");
+      } else {
+        res.status(500).send("Unexpected error");
+        console.error("Error find to database: ", schedules.data);
+      }
+    }
+
+    async RequestFindSchedulesByDateAndAttribute(req, res) {
+      const dateAndAttribute = req.query;
+      const schedules = await scheduleModel.findOneScheduleByDateAndAttribute(dateAndAttribute);
+
+      if (schedules.status) {
+        res.status(200).json(schedules.data);
+        console.log("Successfully find to schedules");
+      } else {
+        res.status(500).send("Unexpected error");
+        console.error("Error find to database: ", schedules.data);
+      }
     }
 }
 

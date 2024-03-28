@@ -4,6 +4,8 @@ var router = express.Router();
 var schedulleController = require("../controllers/ScheduleController");
 var DateController = require("../controllers/DateController");
 
+router.get('/schedule', schedulleController.RequestFindSchedulesByDateAndAttribute)
+router.get('/schedule/:date', schedulleController.RequestFindSchedulesByDate)
 router.get('/schedules', schedulleController.RequestFindAllSchedules);
 router.get('/dates', DateController.RequestFindAllAvailableHours);
 router.post('/schedule', schedulleController.RequestCreateSchedule);
