@@ -5,12 +5,12 @@ const scheduleDate = new mongoose.Schema({
   hours: [String]
 });
 
-const dateHors = mongoose.model('dateHors', scheduleDate);
+const dateHours = mongoose.model('dateHours', scheduleDate);
 
 class Dates {
   async createAvailableHours(date, hours) {
     try {
-      const newDate = new dateHors({
+      const newDate = new dateHours({
         date: date,
         hours: hours
       });
@@ -24,9 +24,9 @@ class Dates {
 
   async findAllRegisteredHours() {
     try {
-      const dateHors = await dateHors.find();
+      const dateAndHours = await dateHours.find();
 
-      return {data: dateHors, status: true};
+      return {data: dateAndHours, status: true};
     } catch(err) {
       return {data: err, status: false};
     }
@@ -34,9 +34,9 @@ class Dates {
 
   async findHorsRegisteredByDate(date) {
     try {
-      const hors = await dateHors.find({date: date});
+      const hours = await dateHours.find({date: date});
 
-      return {data: hors, status: true};
+      return {data: hours, status: true};
     } catch(err) {
       return {data: err, status: false};
     }

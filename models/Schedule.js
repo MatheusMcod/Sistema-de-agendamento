@@ -4,9 +4,9 @@ const scheduleUser = new mongoose.Schema({
   name: String,
   phoneNumber: String,
   email: String,
-  service: String,
+  service: [String],
   date: String,
-  hour: String
+  hour: String,
 });
 
 const schedulesHors = mongoose.model('schedulesHors', scheduleUser);

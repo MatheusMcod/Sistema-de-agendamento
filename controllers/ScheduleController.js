@@ -1,10 +1,33 @@
 const mongoose = require("mongoose");
 const scheduleModel = require("../models/Schedule.js");
+const dateModel = require("../models/Dates");
+const { validationResult } = require('express-validator');
 
 class UserController {
 
     async RequestCreateSchedule(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          console.error(({ errors: errors.array() }))
+          return res.status(400).redirect("/");
+        }
+
+        const services = ["cabelo", "barba", "sobrancelha"];
         const {name, phoneNumber, email, service, date, hour} = req.body;
+
+        const validServices = service.filter(item => services.includes(item));
+        if (validServices.length !== service.length) {
+          console.error("The requested service does not exist!");
+          return res.status(400).redirect("/");
+        }
+
+        const datesAndHours = await dateModel.findHorsRegisteredByDate(date);
+        const validDatesAndHours = datesAndHours.data.some(item => item.hours.includes(hour));
+        if(!validDatesAndHours) {
+          console.error("Invalid hour!");
+          return res.status(400).redirect("/");
+        }
+
         const modelResponse = await scheduleModel.createSchedule(name, phoneNumber, email, service, date, hour);
 
         if(modelResponse) {
@@ -30,7 +53,6 @@ class UserController {
 
     async RequestFindSchedulesByDate(req, res) {
       const date = req.params.date;
-      console.log(date)
       const schedules = await scheduleModel.findSchedulesByDate(date);
 
       if (schedules.status) {
