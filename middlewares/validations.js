@@ -20,18 +20,18 @@ class Validation {
       .escape().withMessage("email is invalid!"),
       body('service')
       .notEmpty().withMessage("Service is required!")
-      .isArray().withMessage("Service must be a array!"),
-      body('service.*')
-      .custom(value => {
-        if (value !== 'cabelo' && value !== 'barba' && value !== 'sobrancelha') {
-            throw new Error('Invalid service: ' + value);
+      .isArray().withMessage("Service must be a array!")
+      .custom(service => {
+        const uniqueServices = new Set(service);
+        if (uniqueServices.size !== service.length) {
+            throw new Error('Duplicate service found in the array.');
         }
         return true;
-      })
-      .custom(value => {
-        const uniqueServices = new Set(value);
-        if (uniqueValue.size !== value.length) {
-            throw new Error('Duplicate service found in the array.');
+      }),
+      body('service.*')
+      .custom(service => {
+        if (service !== 'cabelo' && service !== 'barba' && service !== 'sobrancelha') {
+            throw new Error('Invalid service: ' + service);
         }
         return true;
       }),
@@ -60,19 +60,19 @@ class Validation {
       .notEmpty().withMessage("hour is required!")
       .isArray().withMessage("hour must be a Array!")
       .custom(hours => {
-        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-        for (const hour of hours) {
-            if (!regex.test(hour)) {
-                throw new Error('Invalid hour format: ' + hour);
-            }
-        }
-        return true;
-      })
-      .custom(hours => {
         const uniqueHours = new Set(hours);
         if (uniqueHours.size !== hours.length) {
             throw new Error('Duplicate hours found in the array.');
         }
+        return true;
+      }),
+      body('hours.*')
+      .custom(hours => {
+        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+          if (!regex.test(hours)) {
+              throw new Error('Invalid hour format: ' + hours);
+          }
+
         return true;
       })
     ]
