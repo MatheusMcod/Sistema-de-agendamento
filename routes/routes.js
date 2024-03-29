@@ -11,6 +11,6 @@ router.get('/schedules', scheduleController.RequestFindAllSchedules);
 router.get('/dates', DateController.RequestFindAllRegisteredHours);
 router.get('/dates/:date', DateController.RequestFindHorsRegisteredByDate);
 router.post('/schedule', validations.scheduleValidations(), scheduleController.RequestCreateSchedule);
-router.post('/date', DateController.requestCreateAvailableHours);
+router.post('/date', validations.datesValidations(), DateController.requestCreateAvailableHours);
 
 module.exports = router;

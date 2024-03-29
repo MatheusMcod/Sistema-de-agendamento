@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
 const dateModel = require("../models/Dates");
+const { validationResult } = require('express-validator');
 
 class DateController {
 
     async requestCreateAvailableHours (req, res) {
         const {date, hours} = req.body;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          console.error(({ errors: errors.array() }))
+          return res.status(400).redirect("/");
+        }
+
         const modelResponse = await dateModel.createAvailableHours(date, hours);
 
         if(modelResponse) {

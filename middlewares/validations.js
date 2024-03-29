@@ -30,7 +30,8 @@ class Validation {
       body('date')
       .notEmpty().withMessage("date is required!")
       .isString().withMessage("date must be a string!")
-      .escape().withMessage("date is invalid!"),
+      .escape().withMessage("date is invalid!")
+      .matches(/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/).withMessage("Invalid date format!"),
       body('hour')
       .notEmpty().withMessage("hour is required!")
       .isString().withMessage("hour must be a string!")
@@ -45,11 +46,27 @@ class Validation {
       body('date')
       .notEmpty().withMessage("date is required!")
       .isString().withMessage("date must be a string!")
-      .escape().withMessage("date is invalid!"),
+      .escape().withMessage("date is invalid!")
+      .matches(/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/).withMessage("Invalid date format!"),
       body('hours')
       .notEmpty().withMessage("hour is required!")
-      .isString().withMessage("hour must be a string!")
-      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage("hour is invalid!"),
+      .isArray().withMessage("hour must be a Array!")
+      .custom(hours => {
+        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+        for (const hour of hours) {
+            if (!regex.test(hour)) {
+                throw new Error('Invalid hour format: ' + hour);
+            }
+        }
+        return true;
+      })
+      .custom(hours => {
+        const uniqueHours = new Set(hours);
+        if (uniqueHours.size !== hours.length) {
+            throw new Error('Duplicate hours found in the array.');
+        }
+        return true;
+      })
     ]
 
     return definitionValidations
