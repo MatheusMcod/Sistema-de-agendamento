@@ -21,9 +21,17 @@ class Validation {
       body('service')
       .notEmpty().withMessage("Service is required!")
       .isArray().withMessage("Service must be a array!"),
-      body('service.*').custom(value => {
+      body('service.*')
+      .custom(value => {
         if (value !== 'cabelo' && value !== 'barba' && value !== 'sobrancelha') {
             throw new Error('Invalid service: ' + value);
+        }
+        return true;
+      })
+      .custom(value => {
+        const uniqueServices = new Set(value);
+        if (uniqueValue.size !== value.length) {
+            throw new Error('Duplicate service found in the array.');
         }
         return true;
       }),
