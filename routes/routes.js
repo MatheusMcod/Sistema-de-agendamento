@@ -3,7 +3,7 @@ var app = express();
 var router = express.Router();
 var scheduleController = require("../controllers/ScheduleController");
 var DateController = require("../controllers/DateController");
-var validations = require("../validations/validations")
+var validations = require("../middlewares/validations")
 
 router.get('/schedule', scheduleController.RequestFindSchedulesByDateAndAttribute)
 router.get('/schedule/:date', scheduleController.RequestFindSchedulesByDate)

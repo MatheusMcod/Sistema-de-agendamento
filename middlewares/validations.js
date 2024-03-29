@@ -20,8 +20,13 @@ class Validation {
       .escape().withMessage("email is invalid!"),
       body('service')
       .notEmpty().withMessage("Service is required!")
-      .isArray().withMessage("Service must be a array!")
-      .escape().withMessage("Service is invalid!"),
+      .isArray().withMessage("Service must be a array!"),
+      body('service.*').custom(value => {
+        if (value !== 'cabelo' && value !== 'barba' && value !== 'sobrancelha') {
+            throw new Error('Invalid service: ' + value);
+        }
+        return true;
+      }),
       body('date')
       .notEmpty().withMessage("date is required!")
       .isString().withMessage("date must be a string!")
@@ -33,6 +38,21 @@ class Validation {
     ];
 
     return definitionValidations;
+  }
+
+  datesValidations() {
+    const definitionValidations = [
+      body('date')
+      .notEmpty().withMessage("date is required!")
+      .isString().withMessage("date must be a string!")
+      .escape().withMessage("date is invalid!"),
+      body('hours')
+      .notEmpty().withMessage("hour is required!")
+      .isString().withMessage("hour must be a string!")
+      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage("hour is invalid!"),
+    ]
+
+    return definitionValidations
   }
 
 }

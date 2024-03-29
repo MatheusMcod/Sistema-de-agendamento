@@ -6,18 +6,12 @@ const { validationResult } = require('express-validator');
 class UserController {
 
     async RequestCreateSchedule(req, res) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          console.error(({ errors: errors.array() }))
-          return res.status(400).redirect("/");
-        }
-
         const services = ["cabelo", "barba", "sobrancelha"];
         const {name, phoneNumber, email, service, date, hour} = req.body;
 
-        const validServices = service.filter(item => services.includes(item));
-        if (validServices.length !== service.length) {
-          console.error("The requested service does not exist!");
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          console.error(({ errors: errors.array() }))
           return res.status(400).redirect("/");
         }
 
