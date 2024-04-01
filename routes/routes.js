@@ -1,9 +1,9 @@
-var express = require("express");
-var app = express();
-var router = express.Router();
-var scheduleController = require("../controllers/ScheduleController");
-var DateController = require("../controllers/DateController");
-var validations = require("../middlewares/validations")
+let express = require("express");
+let app = express();
+let router = express.Router();
+let scheduleController = require("../controllers/ScheduleController");
+let DateController = require("../controllers/DateController");
+let validations = require("../middlewares/validations");
 
 router.get('/schedule', scheduleController.RequestFindSchedulesByDateAndAttribute)
 router.get('/schedule/:date', scheduleController.RequestFindSchedulesByDate)

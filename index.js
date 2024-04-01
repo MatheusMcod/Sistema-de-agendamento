@@ -3,11 +3,16 @@ let express = require("express");
 let app = express();
 let router = require("./routes/routes");
 let connection = require("./database/connection");
- 
+let AdminController = require("../controllers/AdminController");
+
 connection.connect();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+(async () => {
+  await adminController.RequestCreateAdmin();
+})();
 
 app.use("/",router);
 
