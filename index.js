@@ -3,7 +3,7 @@ let express = require("express");
 let app = express();
 let router = require("./routes/routes");
 let connection = require("./database/connection");
-let AdminController = require("../controllers/AdminController");
+let createAdmin = require("./scripts/CreteAdmin");
 
 connection.connect();
 
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 (async () => {
-  await adminController.RequestCreateAdmin();
+  await createAdmin.requestCreateAdmin();
 })();
 
 app.use("/",router);
