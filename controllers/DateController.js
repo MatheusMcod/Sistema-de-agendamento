@@ -15,21 +15,21 @@ class DateController {
 
         const modelResponse = await dateModel.createAvailableHours(date, hours);
 
-        if(modelResponse) {
+        if(modelResponse === true) {
           console.log("Successfully saved to database");
-          res.status(201).redirect("/");
+          res.status(201).json({status: "true", msg: "Successfully saved to hours"});
         } else {
           console.error("Error saving to database: ", modelResponse.message);
-          res.status(500).redirect("/");
+          res.status(500).send("Unexpected error");
         }
     }
 
     async RequestFindAllRegisteredHours(req, res) {
       const dateHours = await dateModel.findAllRegisteredHours();
 
-      if (dateHours.status) {
+      if (dateHours.status === true) {
         res.status(200).json(dateHours.data);
-        console.log("Successfully find to schedules");
+        console.log("Successfully find to hours");
       } else {
         res.status(500).send("Unexpected error");
         console.error("Error find to database: ", dateHours.data.message);
@@ -40,9 +40,9 @@ class DateController {
       const date = req.params.date;
       const hours = await dateModel.findHorsRegisteredByDate(date);
 
-      if (hours.status) {
+      if (hours.status === true) {
         res.status(200).json(hours.data);
-        console.log("Successfully find to schedules");
+        console.log("Successfully find to hours");
       } else {
         res.status(500).send("Unexpected error");
         console.error("Error find to database: ", hours.data.message);

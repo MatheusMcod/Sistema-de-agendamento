@@ -5,22 +5,20 @@ const scheduleUser = new mongoose.Schema({
   phoneNumber: String,
   email: String,
   service: [String],
-  date: String,
-  hour: String,
+  date: Date,
 });
 
 const schedulesHors = mongoose.model('schedulesHors', scheduleUser);
 
 class Schedule {
-  async createSchedule(name, phoneNumber, email, service, date, hour) {
+  async createSchedule(name, phoneNumber, email, service, date) {
     try{
       const newSchedule = new schedulesHors({
         name: name,
         phoneNumber: phoneNumber,
         email: email,
         service: service,
-        date: date,
-        hour: hour
+        date: new Date(date)
       });
 
       await newSchedule.save();
@@ -42,7 +40,8 @@ class Schedule {
 
   async findSchedulesByDate(date) {
     try {
-      const schedules = await schedulesHors.find({date: date});
+      const dateFind = new Date(date)
+      const schedules = await schedulesHors.find({date: dateFind});
 
       return {data: schedules, status: true};
     } catch(err) {
@@ -58,6 +57,10 @@ class Schedule {
     } catch(err) {
       return {data: err, status: false};
     }
+  }
+
+  async deleteSchedule() {
+
   }
 
 }

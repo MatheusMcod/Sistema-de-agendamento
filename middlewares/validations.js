@@ -39,11 +39,7 @@ class Validation {
       .notEmpty().withMessage("date is required!")
       .isString().withMessage("date must be a string!")
       .escape().withMessage("date is invalid!")
-      .matches(/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/).withMessage("Invalid date format!"),
-      body('hour')
-      .notEmpty().withMessage("hour is required!")
-      .isString().withMessage("hour must be a string!")
-      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage("hour is invalid!"),
+      .matches(/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/).withMessage("Invalid date format!"),
     ];
 
     return definitionValidations;
@@ -68,7 +64,7 @@ class Validation {
       }),
       body('hours.*')
       .custom(hours => {
-        const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+        const regex = /^([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
           if (!regex.test(hours)) {
               throw new Error('Invalid hour format: ' + hours);
           }
