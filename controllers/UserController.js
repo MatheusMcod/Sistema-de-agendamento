@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 const userModel = require("../models/User");
+const { validationResult } = require('express-validator');
 
 class UserController {
   async requestCreateEmployeeUser (req, res) {
     const {name, email, phoneNumber, password} = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.error(({ errors: errors.array() }))
+      return res.status(400).redirect("/");
+    }
 
     const findUserByEmailResponse = await userModel.findUserByEmail(email);
     if (findUserByEmailResponse.status === true) {
@@ -36,6 +43,12 @@ class UserController {
 
   async requestCreateUser (req, res) {
     const {name, email, phoneNumber, password} = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.error(({ errors: errors.array() }))
+      return res.status(400).redirect("/");
+    }
 
     const findUserByEmailResponse = await userModel.findUserByEmail(email)
     if (findUserByEmailResponse.status === true) {

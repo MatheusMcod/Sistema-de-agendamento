@@ -76,6 +76,32 @@ class Validation {
     return definitionValidations
   }
 
+  usersValidations() {
+    const definitionValidations = [
+      body('name')
+      .notEmpty().withMessage("Name is required!")
+      .isString().withMessage("Name must be a string!")
+      .isAlpha().withMessage('Name must contain only alphabetic characters!')
+      .escape().withMessage("Name is invalid!"),
+      body('phoneNumber')
+      .notEmpty().withMessage("Phone number is required!")
+      .isString().withMessage("Phone number must be a string!")
+      .isNumeric().withMessage('Phone number must contain only numeric characters!')
+      .escape().withMessage("Phone number is invalid!"),
+      body('email')
+      .notEmpty().withMessage("Email is required!")
+      .isEmail().withMessage("email is invalid!")
+      .isString().withMessage("email must be a string!")
+      .escape().withMessage("email is invalid!"),
+      body('password')
+      .notEmpty().withMessage("Password is required!")
+      .isString().withMessage("password must be a string!")
+      .escape().withMessage("Password is invalid!")
+    ];
+
+    return definitionValidations;
+  }
+
 }
 
 module.exports = new Validation;
