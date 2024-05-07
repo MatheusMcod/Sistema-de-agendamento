@@ -9,7 +9,7 @@ class CreateAdmin {
       return;
     }
 
-    const createAdminResult = await userModel.createAdmin('admin', 'admin@gmail.com', '', 'admin');
+    const createAdminResult = await userModel.createUser('admin', 'admin@gmail.com', '', 'admin', 'admin');
 
     if(createAdminResult === true) {
       console.log("Administrative user created successfully.");
