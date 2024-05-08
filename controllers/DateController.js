@@ -10,17 +10,17 @@ class DateController {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           console.error(({ errors: errors.array() }))
-          return res.status(400).redirect("/");
+          return res.status(400).json({errors: errors.array()});
         }
 
         const modelResponse = await dateModel.createAvailableHours(date, hours);
 
         if(modelResponse === true) {
           console.log("Successfully saved to database");
-          res.status(201).json({status: "true", msg: "Successfully saved to hours"});
+          return res.status(201).json({status: "true", msg: "Successfully saved to hours"});
         } else {
           console.error("Error saving to database: ", modelResponse.message);
-          res.status(500).send("Unexpected error");
+          return res.status(500).json({status: "false", msg: "Unexpected error"});
         }
     }
 
@@ -28,11 +28,11 @@ class DateController {
       const dateHours = await dateModel.findAllRegisteredHours();
 
       if (dateHours.status === true) {
-        res.status(200).json(dateHours.data);
         console.log("Successfully find to hours");
+        return res.status(200).json(dateHours.data);
       } else {
-        res.status(500).send("Unexpected error");
         console.error("Error find to database: ", dateHours.data.message);
+        return res.status(500).json({status: "false", msg: "Unexpected error"});
       }
     }
 
@@ -41,11 +41,11 @@ class DateController {
       const hours = await dateModel.findHorsRegisteredByDate(date);
 
       if (hours.status === true) {
-        res.status(200).json(hours.data);
         console.log("Successfully find to hours");
+        return res.status(200).json(hours.data);
       } else {
-        res.status(500).send("Unexpected error");
         console.error("Error find to database: ", hours.data.message);
+        return res.status(500).json({status: "false", msg: "Unexpected error"});
       }
     }
 

@@ -12,7 +12,7 @@ class UserController {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           console.error(({ errors: errors.array() }))
-          return res.status(400).redirect("/");
+          return res.status(400).json({errors: errors.array()});
         }
 
         const cutoffValueHour = 11
@@ -21,19 +21,18 @@ class UserController {
         const hour = (date.slice(cutoffValueHour))
         const validDatesAndHours = datesAndHours.data.some(item => item.hours.includes(hour));
         if(!validDatesAndHours) {
-          console.error("Invalid hour!");
-          return res.status(400).redirect("/");
+          console.error("Invalid hour");
+          return res.status(400).json({status: "false", msg: "Invalid hour"});
         }
 
         const modelResponse = await scheduleModel.createSchedule(name, phoneNumber, email, service, date);
 
-
         if(modelResponse === true) {
           console.log("Successfully saved to database");
-          res.status(201).json({status: "true", msg: "Successfully saved to schedule"});
+          return res.status(201).json({status: "true", msg: "Successfully saved to schedule"});
         } else {
           console.error("Error saving to database: ", modelResponse.message);
-          res.status(500).redirect("/");
+          return res.status(500).json({status: "false", msg: "Unexpected error"});
         }
     }
 
@@ -41,11 +40,11 @@ class UserController {
         const schedules = await scheduleModel.findAllSchedules();
 
         if (schedules.status === true) {
-          res.status(200).json(schedules.data);
           console.log("Successfully find to schedules");
+          return res.status(200).json(schedules.data);
         } else {
-          res.status(500).send("Unexpected error");
           console.error("Error find to database: ", schedules.data);
+          return res.status(500).json({status: "false", msg: "Unexpected error"});
         }
     }
 
@@ -55,15 +54,15 @@ class UserController {
         const schedules = await scheduleModel.findSchedulesByDate(searchDate);
 
         if (schedules.status === true) {
-          res.status(200).json(schedules.data);
           console.log("Successfully find to schedules");
+          return res.status(200).json(schedules.data);
         } else {
-          res.status(500).send("Unexpected error");
           console.error("Error find to database: ", schedules.data);
+          return res.status(500).json({status: "false", msg: "Unexpected error"});
         }
       } else {
-        res.status(400).send("Invalid parameters");
         console.error("Invalid parameters: ", searchDate.data);
+        return res.status(400).json({status: "false", msg: "Invalid parameters"});
       }
     }
 
@@ -75,19 +74,19 @@ class UserController {
           const schedules = await scheduleModel.findOneScheduleByDateAndAttribute(dateAndAttribute);
 
           if (schedules.status === true) {
-            res.status(200).json(schedules.data);
             console.log("Successfully found schedule");
+            return res.status(200).json(schedules.data);
           } else {
-            res.status(500).send("Unexpected error");
             console.error("Error finding in database: ", schedules.data);
+            return res.status(500).json({status: "false", msg: "Unexpected error"});
           }
         } else {
-          res.status(400).send("Invalid date format");
           console.error("Invalid date format: ", dateAndAttribute.data);
+          return res.status(400).json({status: "false", msg: "Invalid date format"});
         }
       } else {
-        res.status(400).send("Invalid query parameters");
         console.error("Invalid query parameters: ", dateAndAttribute.data);
+        return res.status(400).json({status: "false", msg: "Invalid query parameters"});
       }
     }
 }

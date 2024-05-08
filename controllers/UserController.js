@@ -9,7 +9,7 @@ class UserController {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.error(({ errors: errors.array() }))
-      return res.status(400).redirect("/");
+      return res.status(400).json({errors: errors.array()});
     }
 
     const findUserByEmailResponse = await userModel.findUserByEmail(email);
