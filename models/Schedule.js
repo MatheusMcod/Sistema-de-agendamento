@@ -1,9 +1,10 @@
 let mongoose = require("mongoose");
+let { ObjectId } = require('mongodb');
 
 const scheduleUser = new mongoose.Schema({
   name: String,
-  phoneNumber: String,
-  email: String,
+  phoneNumber: {type: String, unique: true},
+  email: {type: String, unique: true},
   service: [String],
   date: Date,
 });
@@ -59,8 +60,27 @@ class Schedule {
     }
   }
 
-  async deleteSchedule() {
+  async deleteSchedules(hors, date) {
+    try {
+      const horsAndDate = hors.map(hor => date + 'T' + hor)
 
+      const schedules = await schedulesHors.deleteMany({date: {$in: horsAndDate}});
+
+      return {data: schedules, status: true};
+    } catch(err) {
+      return {data: err, status: false};
+    }
+  }
+
+  async deleteSchedule(id) {
+    try {
+      const objectId = ObjectId.createFromHexString(id);
+      const schedules = await schedulesHors.deleteOne(objectId);
+
+      return {data: schedules, status: true};
+    } catch(err) {
+      return {data: err, status: false};
+    }
   }
 
 }

@@ -51,7 +51,7 @@ class Validation {
       .notEmpty().withMessage("date is required!")
       .isString().withMessage("date must be a string!")
       .escape().withMessage("date is invalid!")
-      .matches(/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/).withMessage("Invalid date format!"),
+      .matches(/^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).withMessage("Invalid date format!"),
       body('hours')
       .notEmpty().withMessage("hour is required!")
       .isArray().withMessage("hour must be a Array!")

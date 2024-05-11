@@ -1,4 +1,5 @@
 let mongoose = require("mongoose");
+let { ObjectId } = require('mongodb');
 
 const scheduleDate = new mongoose.Schema({
   date: String,
@@ -35,6 +36,27 @@ class Dates {
   async findHorsRegisteredByDate(date) {
     try {
       const hours = await dateHours.find({date: date});
+
+      return {data: hours, status: true};
+    } catch(err) {
+      return {data: err, status: false};
+    }
+  }
+
+  async findHoursRegisteredById(id) {
+    try {
+      const objectId = ObjectId.createFromHexString(id);
+      const hours = await dateHours.findOne(objectId);
+
+      return {data: hours, status: true};
+    } catch(err) {
+      return {data: err, status: false};
+    }
+  }
+
+  async deleteRegisteredHours(id) {
+    try {
+      const hours = await dateHours.deleteOne(id);
 
       return {data: hours, status: true};
     } catch(err) {

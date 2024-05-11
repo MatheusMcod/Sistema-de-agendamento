@@ -11,16 +11,17 @@ class UserController {
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-          console.error(({ errors: errors.array() }))
+          console.error(({ errors: errors.array() }));
           return res.status(400).json({errors: errors.array()});
         }
 
-        const cutoffValueHour = 11
-        const cutoffValueDate = 0
+        const cutoffValueHour = 11;
+        const cutoffValueDate = 0;
         const datesAndHours = await dateModel.findHorsRegisteredByDate(date.slice(cutoffValueDate, cutoffValueHour-1));
-        const hour = (date.slice(cutoffValueHour))
+        const hourSchedules = await scheduleModel.findSchedulesByDate(date);
+        const hour = (date.slice(cutoffValueHour));
         const validDatesAndHours = datesAndHours.data.some(item => item.hours.includes(hour));
-        if(!validDatesAndHours) {
+        if(!validDatesAndHours && (hourSchedules.data.status === false || hourSchedules.data.length != 0)) {
           console.error("Invalid hour");
           return res.status(400).json({status: "false", msg: "Invalid hour"});
         }
@@ -89,6 +90,24 @@ class UserController {
         return res.status(400).json({status: "false", msg: "Invalid query parameters"});
       }
     }
+
+    async RequestDeleteSchedule(req, res) {
+      const id = req.params.id;
+      const scheduleResponse = await scheduleModel.deleteSchedule(id);
+
+      if (scheduleResponse.status === true) {
+        if (scheduleResponse.data.deletedCount != 0) {
+          console.log("Successful delete schedule");
+          return res.status(200).json({status: "true", msg: "Successful delete schedule"});
+        } else {
+          console.log("No schedules found");
+          return res.status(200).json({status: "true", msg: "No schedules found"});
+        }
+      } else {
+        console.error("Error delete schedule: ", scheduleResponse.data.message);
+        return res.status(500).json({status: "false", msg: "Unexpected error"});
+      }
+  }
 }
 
 module.exports = new UserController;
