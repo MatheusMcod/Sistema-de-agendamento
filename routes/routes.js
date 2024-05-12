@@ -18,6 +18,6 @@ router.post('/register', Validations.usersValidations(), UserController.requestC
 router.post('/register/employee', Validations.usersValidations(), UserController.requestCreateEmployeeUser);
 router.delete('/schedule/:id', scheduleController.RequestDeleteSchedule);
 router.delete('/date/:id', DateController.RequestDeleteRegisteredHours);
-
+router.delete('/user/:id', UserController.requestDeleteUser);
 
 module.exports = router;

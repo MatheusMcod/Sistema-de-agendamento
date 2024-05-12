@@ -69,7 +69,7 @@ class DateController {
         }
 
         console.log("Successful delete");
-        return res.status(200).json(responseDeleteHours.data);
+        return res.status(200).json({status: "true", msg: "Successful delete"});
     } catch (error) {
         console.error("Error:", error);
         return res.status(500).json({ status: false, msg: error.message });

@@ -1,4 +1,5 @@
 let mongoose = require("mongoose");
+let { ObjectId } = require('mongodb');
 
 const userScheme = new mongoose.Schema({
   name: String,
@@ -90,6 +91,17 @@ class User {
       } else {
         return {data: resultUsers, status: false};
       }
+    } catch(err) {
+      return {data: err, status: false};
+    }
+  }
+
+  async deleteUser(id) {
+    try {
+      const objectId = ObjectId.createFromHexString(id);
+      const userResponse = await user.deleteOne(objectId)
+
+      return {data: userResponse, status: true};
     } catch(err) {
       return {data: err, status: false};
     }

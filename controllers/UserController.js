@@ -92,6 +92,19 @@ class UserController {
       return res.status(500).send("Unexpected error");
     }
   }
+
+  async requestDeleteUser(req, res) {
+    const id = req.params.id;
+    const userResponse = await userModel.deleteUser(id);
+
+    if (userResponse.status === true) {
+      console.log("Successfully delete");
+      return res.status(200).json({status: "true", msg: "Successfully delete"});
+    } else {
+      console.error("Error delete: ", userResponse.data.message);
+      return res.status(500).send("Unexpected error");
+    }
+  }
 }
 
 module.exports = new UserController;
